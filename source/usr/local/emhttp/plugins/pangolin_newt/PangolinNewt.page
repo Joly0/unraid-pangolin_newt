@@ -1,0 +1,32 @@
+Menu="NetworkServices"
+Title="Pangolin Newt"
+Icon="pangolin_newt.png"
+Markdown="false"
+Cond="!file_exists('/usr/local/emhttp/plugins/pangolin_cli/PangolinCLITab.page')"
+---
+<?
+/* Pangolin Newt - standalone Settings entry.
+ *
+ * Shown only when the Pangolin CLI plugin is NOT installed. When it is, this
+ * entry disappears and PangolinNewtTab.page renders the same form as a tab
+ * inside the shared "Pangolin" group, so the two plugins take one slot in
+ * Settings instead of two. Both are thin wrappers around include/settings.php.
+ *
+ * The Cond above deliberately tests for the CLI plugin's *tab* page rather
+ * than just its plugin directory: an older CLI plugin without grouping support
+ * has no such file, so both plugins keep their own entry instead of forming a
+ * half-empty group.
+ *
+ * Why the eval below instead of a plain include: Unraid renders a page by
+ * running Markdown() over the raw .page text and only then eval'ing the
+ * result (see generateContent() in DefaultPageLayout/MainContent.php). An
+ * include would skip the Markdown step and the form's definition-list layout
+ * would come out as literal text, so the two steps are reproduced here in the
+ * same order, on the shared body. Markdown="false" above stops this wrapper
+ * itself from being processed twice. Kept inline rather than wrapped in a
+ * function so the body still evaluates in the page scope it expects.
+ */
+$docroot ??= ($_SERVER['DOCUMENT_ROOT'] ?: '/usr/local/emhttp');
+$evalFile    = "$docroot/plugins/pangolin_newt/include/settings.php";
+$evalContent = '?>'.Markdown(parse_text(file_get_contents($evalFile)));
+include "$docroot/webGui/include/DefaultPageLayout/evalContent.php";

@@ -1,0 +1,30 @@
+# Keep the Newt tunnel up, and preserve self-updates across reboots.
+#
+# --- watchdog ---------------------------------------------------------------
+# Newt's registration handshake with the Pangolin server fails intermittently:
+# it authenticates, logs "SendMessageInterval timed out ... newt/wg/register",
+# and then keeps the process alive forever without ever retrying. Measured on a
+# live server, roughly a quarter of starts land in that state, and none of them
+# recover on their own - so without this a site can sit silently disconnected
+# after a boot or a network blip until somebody notices and presses Connect.
+#
+# The check is cheap (a pgrep and a stat of the health file) and does nothing
+# at all unless the service is meant to be connected but is not: pressing
+# Disconnect removes the intent marker, so a deliberate disconnect is never
+# undone. Five minutes keeps a failed reconnect short without hammering the
+# server if it is genuinely down.
+*/5 * * * * /etc/rc.d/rc.newt watchdog >/dev/null 2>&1
+
+# --- self-update sync -------------------------------------------------------
+# Only does anything when "Allow Newt to update itself" is set to Yes in
+# Settings > Pangolin Newt. Newt replaces its own binary in /usr/local/bin,
+# which lives in RAM on Unraid and is rebuilt on every boot, so without this
+# the server would silently roll back to the plugin's bundled version at the
+# next reboot. In steady state this is a single cmp of two files, and it is a
+# no-op entirely when self-update is disabled (the default).
+#
+# Ten minutes is deliberately unhurried: Newt only checks for updates a couple
+# of minutes after start and then every six hours, so there is nothing to catch
+# more often than that, and the window for losing an update is a reboot within
+# ten minutes of one landing.
+*/10 * * * * /etc/rc.d/rc.newt sync-binary >/dev/null 2>&1

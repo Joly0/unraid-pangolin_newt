@@ -1,0 +1,7 @@
+/var/log/pangolin_newt.log {
+   daily
+   rotate 4
+   notifempty
+   missingok
+   copytruncate
+}

@@ -1,0 +1,122 @@
+<?xml version='1.0' standalone='yes'?>
+<!DOCTYPE PLUGIN [
+  <!ENTITY name        "pangolin_newt">
+  <!ENTITY author      "Joly0">
+  <!ENTITY version     "2026.08.13">
+  <!ENTITY newtVersion "1.15.0">
+  <!ENTITY gitURL      "https://github.com/&author;/unraid-&name;/raw/main">
+  <!ENTITY pluginURL   "&gitURL;/&name;.plg">
+  <!ENTITY md5         "7ee9ae267871da67e3a378a57c1849a5">
+  <!ENTITY binURL      "https://github.com/fosrl/newt/releases/download/&newtVersion;/newt_linux_amd64">
+  <!ENTITY plugin      "/boot/config/plugins/&name;">
+  <!ENTITY emhttp      "/usr/local/emhttp/plugins/&name;">
+  <!ENTITY binPersist  "&plugin;/newt">
+  <!ENTITY binTarget   "/usr/local/bin/newt">
+]>
+
+<PLUGIN name="&name;" author="&author;" version="&version;" pluginURL="&pluginURL;" min="7.0.0" icon="sitemap">
+
+<CHANGES>
+
+###2026.08.13
+- Initial release. Installs Newt &newtVersion; and adds a Settings page to register this server with a Pangolin instance as a site.
+- Shares a single "Pangolin" entry in Settings with the Pangolin CLI plugin when both are installed.
+- Connecting retries automatically: Newt's registration handshake fails intermittently and, when it does, it keeps running without ever retrying, so Connect now relaunches it until the tunnel is healthy.
+- A watchdog re-connects a site that drops or never came up, so autostart cannot leave it silently offline. Pressing Disconnect is always respected.
+- The Connect/Disconnect/Apply buttons target their own form, so they keep working when both Pangolin plugins share the grouped Settings entry as tabs.
+- Connecting no longer freezes the webGui: /update.php holds the PHP session lock for the whole request, so bringing the tunnel up now runs in the background and the page reports progress via its status line.
+
+</CHANGES>
+
+<!-- Download and install the webGui package (settings page + service script) -->
+<FILE Name="&plugin;/&name;-&version;.txz" Run="upgradepkg --install-new">
+<URL>&gitURL;/packages/&name;-&version;.txz</URL>
+<MD5>&md5;</MD5>
+</FILE>
+
+<!-- Install the Newt binary.
+     The root filesystem is volatile on Unraid, so the binary is kept on the
+     flash drive and restored to PATH on every boot. It is downloaded once
+     (or whenever the bundled Newt version changes).
+     Note: when the user enables "Allow Newt to update itself", Newt may have
+     replaced the flash copy with a newer build. The version check below only
+     forces a download when the flash copy is OLDER than what this plugin
+     bundles, so a self-updated binary is not dragged back down. -->
+<FILE Run="/bin/bash">
+<INLINE>
+mkdir -p &plugin;
+NEED_DOWNLOAD=1
+if [ -s "&binPersist;" ]; then
+  HAVE="$("&binPersist;" --version 2>/dev/null | head -n1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')"
+  if [ -n "$HAVE" ]; then
+    NEWEST="$(printf '%s\n%s\n' "$HAVE" "&newtVersion;" | sort -V | tail -n1)"
+    if [ "$NEWEST" = "$HAVE" ]; then
+      NEED_DOWNLOAD=0
+      [ "$HAVE" != "&newtVersion;" ] &amp;&amp; echo "Keeping newer Newt $HAVE already on the flash drive."
+    fi
+  fi
+fi
+if [ "$NEED_DOWNLOAD" = "1" ]; then
+  echo "Downloading Newt &newtVersion; ..."
+  if curl -fsSL -o "&binPersist;.tmp" "&binURL;"; then
+    chmod 0755 "&binPersist;.tmp"
+    mv -f "&binPersist;.tmp" "&binPersist;"
+  else
+    rm -f "&binPersist;.tmp"
+    if [ ! -s "&binPersist;" ]; then
+      echo "ERROR: failed to download the Newt binary from &binURL;"
+      echo "Check the server's internet connection and reinstall the plugin."
+      exit 1
+    fi
+    echo "WARNING: download failed, keeping the previously installed binary."
+  fi
+fi
+install -D -m 0755 "&binPersist;" "&binTarget;"
+echo "Newt installed: $("&binTarget;" --version 2>/dev/null | head -n1)"
+</INLINE>
+</FILE>
+
+<!-- Start the site on boot if the user enabled autostart -->
+<FILE Run="/bin/bash">
+<INLINE>
+# The webGui wrapper must be executable for /update.php to run it; assert it
+# on every (re)install as a safety net in case a package lost the exec bit.
+chmod 755 &emhttp;/scripts/rc.newt 2>/dev/null
+if [ -x /etc/rc.d/rc.newt ]; then
+  /etc/rc.d/rc.newt autostart 2>/dev/null
+fi
+</INLINE>
+</FILE>
+
+<!-- Installation complete message -->
+<FILE Run="/bin/bash">
+<INLINE>
+echo ""
+echo "----------------------------------------------------------------"
+echo " Pangolin Newt plugin installed."
+echo " Configure your site under Settings > Pangolin Newt."
+if [ -f /usr/local/emhttp/plugins/pangolin_cli/PangolinCLITab.page ]; then
+echo " The Pangolin CLI plugin is installed too, so both now share a"
+echo " single Settings > Pangolin entry with a tab each."
+fi
+echo "----------------------------------------------------------------"
+echo ""
+</INLINE>
+</FILE>
+
+<!-- Uninstall -->
+<FILE Run="/bin/bash" Method="remove">
+<INLINE>
+echo "----------------------------------------"
+echo "-------- Uninstalling Newt --------------"
+echo "----------------------------------------"
+/etc/rc.d/rc.newt stop 2>/dev/null
+removepkg &name;-&version; 2>/dev/null
+rm -f &binTarget;
+rm -rf &emhttp;
+rm -rf &plugin;
+echo "Pangolin Newt plugin removed."
+</INLINE>
+</FILE>
+
+</PLUGIN>
