@@ -2,7 +2,7 @@
 <!DOCTYPE PLUGIN [
   <!ENTITY name        "pangolin_newt">
   <!ENTITY author      "Joly0">
-  <!ENTITY version     "2026.08.13">
+  <!ENTITY version     "2026.08.13a">
   <!ENTITY newtVersion "1.15.0">
   <!ENTITY gitURL      "https://github.com/&author;/unraid-&name;/raw/main">
   <!ENTITY pluginURL   "&gitURL;/&name;.plg">
@@ -14,9 +14,22 @@
   <!ENTITY binTarget   "/usr/local/bin/newt">
 ]>
 
-<PLUGIN name="&name;" author="&author;" version="&version;" pluginURL="&pluginURL;" min="7.0.0" icon="sitemap">
+<!-- launch: makes the icon on the Plugins page link to the settings page. The
+     page name is resolved directly from the URL (template.php looks it up by
+     basename and does NOT evaluate Cond), so this keeps working when the CLI
+     plugin is installed too and this page is hidden from the menu in favour of
+     the shared "Pangolin" tab.
+     icon: a .png is looked up under plugins/<name>/, so this shows the actual
+     Pangolin logo rather than a generic font glyph.
+     support: when present here it takes precedence over the Community Apps
+     template's <Support> entry. -->
+<PLUGIN name="&name;" author="&author;" version="&version;" pluginURL="&pluginURL;" min="7.0.0" launch="Settings/PangolinNewt" icon="pangolin_newt.png" support="https://forums.unraid.net/topic/200209-plugin-pangolin-newt/">
 
 <CHANGES>
+
+###2026.08.13a
+- Plugins page: the plugin icon is now the Pangolin logo and links to its settings page.
+- The support thread link is now part of the plugin itself, so it survives updates.
 
 ###2026.08.13
 - Initial release. Installs Newt &newtVersion; and adds a Settings page to register this server with a Pangolin instance as a site.
