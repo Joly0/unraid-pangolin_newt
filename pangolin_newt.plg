@@ -2,11 +2,11 @@
 <!DOCTYPE PLUGIN [
   <!ENTITY name        "pangolin_newt">
   <!ENTITY author      "Joly0">
-  <!ENTITY version     "2026.08.13a">
+  <!ENTITY version     "2026.08.15">
   <!ENTITY newtVersion "1.15.0">
   <!ENTITY gitURL      "https://github.com/&author;/unraid-&name;/raw/main">
   <!ENTITY pluginURL   "&gitURL;/&name;.plg">
-  <!ENTITY md5         "7ee9ae267871da67e3a378a57c1849a5">
+  <!ENTITY md5         "c10851fe9f5ec0ab8b53c847b99c1b33">
   <!ENTITY binURL      "https://github.com/fosrl/newt/releases/download/&newtVersion;/newt_linux_amd64">
   <!ENTITY plugin      "/boot/config/plugins/&name;">
   <!ENTITY emhttp      "/usr/local/emhttp/plugins/&name;">
@@ -26,6 +26,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" pluginURL="&pluginURL;" min="7.0.0" launch="Settings/PangolinNewt" icon="pangolin_newt.png" support="https://forums.unraid.net/topic/200209-plugin-pangolin-newt/">
 
 <CHANGES>
+
+###2026.08.15
+- Fixed the daily "Potentially dangerous mode on pangolin_newt: 0666" cron mail. The plugin's logrotate and cron entries were installed world-writable, so logrotate refused them and /var/log/pangolin_newt.log was never rotated. Upgrading also repairs the permissions of an existing install.
 
 ###2026.08.13a
 - Plugins page: the plugin icon is now the Pangolin logo and links to its settings page.
@@ -95,6 +98,10 @@ echo "Newt installed: $("&binTarget;" --version 2>/dev/null | head -n1)"
 # The webGui wrapper must be executable for /update.php to run it; assert it
 # on every (re)install as a safety net in case a package lost the exec bit.
 chmod 755 &emhttp;/scripts/rc.newt 2>/dev/null
+# logrotate and crond both refuse a config file that is group- or
+# other-writable. Packages up to 2026.08.13a shipped these as 0666, so fix the
+# installed copies directly rather than relying on the package modes alone.
+chmod 644 /etc/logrotate.d/&name; /etc/cron.d/&name; 2>/dev/null
 if [ -x /etc/rc.d/rc.newt ]; then
   /etc/rc.d/rc.newt autostart 2>/dev/null
 fi
