@@ -2,11 +2,11 @@
 <!DOCTYPE PLUGIN [
   <!ENTITY name        "pangolin_newt">
   <!ENTITY author      "Joly0">
-  <!ENTITY version     "2026.08.15">
-  <!ENTITY newtVersion "1.15.0">
+  <!ENTITY version     "2026.08.20">
+  <!ENTITY newtVersion "1.16.0">
   <!ENTITY gitURL      "https://github.com/&author;/unraid-&name;/raw/main">
   <!ENTITY pluginURL   "&gitURL;/&name;.plg">
-  <!ENTITY md5         "c10851fe9f5ec0ab8b53c847b99c1b33">
+  <!ENTITY md5         "c830f058a14c057179ee79a823c09e9a">
   <!ENTITY binURL      "https://github.com/fosrl/newt/releases/download/&newtVersion;/newt_linux_amd64">
   <!ENTITY plugin      "/boot/config/plugins/&name;">
   <!ENTITY emhttp      "/usr/local/emhttp/plugins/&name;">
@@ -26,6 +26,13 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" pluginURL="&pluginURL;" min="7.0.0" launch="Settings/PangolinNewt" icon="pangolin_newt.png" support="https://forums.unraid.net/topic/200209-plugin-pangolin-newt/">
 
 <CHANGES>
+
+###2026.08.20
+- Updated Newt to 1.16.0. Changes from Newt:
+  - Add fallback self signed cert so not locked out of http resources
+  - fix: preserve the pending WireGuard registration chain by @Serph91P in https://github.com/fosrl/newt/pull/424
+  - fix: preserve pending registration chain
+  - Add support for exit node connections in Olm
 
 ###2026.08.15
 - Fixed the daily "Potentially dangerous mode on pangolin_newt: 0666" cron mail. The plugin's logrotate and cron entries were installed world-writable, so logrotate refused them and /var/log/pangolin_newt.log was never rotated. Upgrading also repairs the permissions of an existing install.
