@@ -2,11 +2,11 @@
 <!DOCTYPE PLUGIN [
   <!ENTITY name        "pangolin_newt">
   <!ENTITY author      "Joly0">
-  <!ENTITY version     "2026.08.20">
-  <!ENTITY newtVersion "1.16.0">
+  <!ENTITY version     "2026.09.16">
+  <!ENTITY newtVersion "1.17.0">
   <!ENTITY gitURL      "https://github.com/&author;/unraid-&name;/raw/main">
   <!ENTITY pluginURL   "&gitURL;/&name;.plg">
-  <!ENTITY md5         "c830f058a14c057179ee79a823c09e9a">
+  <!ENTITY md5         "e0a8b5fc476f7e082ba9cc5d70ac049e">
   <!ENTITY binURL      "https://github.com/fosrl/newt/releases/download/&newtVersion;/newt_linux_amd64">
   <!ENTITY plugin      "/boot/config/plugins/&name;">
   <!ENTITY emhttp      "/usr/local/emhttp/plugins/&name;">
@@ -26,6 +26,15 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" pluginURL="&pluginURL;" min="7.0.0" launch="Settings/PangolinNewt" icon="pangolin_newt.png" support="https://forums.unraid.net/topic/200209-plugin-pangolin-newt/">
 
 <CHANGES>
+
+###2026.09.16
+- Updated Newt to 1.17.0. Changes from Newt:
+  - Add support for local endpoint interface allowlist
+  - Add aliased SITE_ prefixed env vars
+  - Add support for importing into the CLI package for running there with `pangolin up site`
+  - Fix crashing with nil pointer checks
+  - Fix accept bare site addresses in client WireGuard config by @totalolage in https://github.com/fosrl/newt/pull/435
+  - Update dependencies
 
 ###2026.08.20
 - Updated Newt to 1.16.0. Changes from Newt:
