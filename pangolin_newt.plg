@@ -2,11 +2,11 @@
 <!DOCTYPE PLUGIN [
   <!ENTITY name        "pangolin_newt">
   <!ENTITY author      "Joly0">
-  <!ENTITY version     "2026.09.16">
-  <!ENTITY newtVersion "1.17.0">
+  <!ENTITY version     "2026.09.30">
+  <!ENTITY newtVersion "1.18.0">
   <!ENTITY gitURL      "https://github.com/&author;/unraid-&name;/raw/main">
   <!ENTITY pluginURL   "&gitURL;/&name;.plg">
-  <!ENTITY md5         "e0a8b5fc476f7e082ba9cc5d70ac049e">
+  <!ENTITY md5         "7f037c5cdb178fb2cf620a6a53e62220">
   <!ENTITY binURL      "https://github.com/fosrl/newt/releases/download/&newtVersion;/newt_linux_amd64">
   <!ENTITY plugin      "/boot/config/plugins/&name;">
   <!ENTITY emhttp      "/usr/local/emhttp/plugins/&name;">
@@ -26,6 +26,10 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" pluginURL="&pluginURL;" min="7.0.0" launch="Settings/PangolinNewt" icon="pangolin_newt.png" support="https://forums.unraid.net/topic/200209-plugin-pangolin-newt/">
 
 <CHANGES>
+
+###2026.09.30
+- Updated Newt to 1.18.0. Changes from Newt:
+  - Add exit node support
 
 ###2026.09.16
 - Updated Newt to 1.17.0. Changes from Newt:
