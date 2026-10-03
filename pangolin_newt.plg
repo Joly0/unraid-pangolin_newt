@@ -2,11 +2,11 @@
 <!DOCTYPE PLUGIN [
   <!ENTITY name        "pangolin_newt">
   <!ENTITY author      "Joly0">
-  <!ENTITY version     "2026.09.30">
-  <!ENTITY newtVersion "1.18.0">
+  <!ENTITY version     "2026.10.03">
+  <!ENTITY newtVersion "1.18.1">
   <!ENTITY gitURL      "https://github.com/&author;/unraid-&name;/raw/main">
   <!ENTITY pluginURL   "&gitURL;/&name;.plg">
-  <!ENTITY md5         "7f037c5cdb178fb2cf620a6a53e62220">
+  <!ENTITY md5         "3a02c716b71411de5e958fda2510e924">
   <!ENTITY binURL      "https://github.com/fosrl/newt/releases/download/&newtVersion;/newt_linux_amd64">
   <!ENTITY plugin      "/boot/config/plugins/&name;">
   <!ENTITY emhttp      "/usr/local/emhttp/plugins/&name;">
@@ -26,6 +26,11 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" pluginURL="&pluginURL;" min="7.0.0" launch="Settings/PangolinNewt" icon="pangolin_newt.png" support="https://forums.unraid.net/topic/200209-plugin-pangolin-newt/">
 
 <CHANGES>
+
+###2026.10.03
+- Updated Newt to 1.18.1. Changes from Newt:
+  - Watch override routes and maintain them in the route table by @oschwartz10612 in https://github.com/fosrl/newt/pull/459
+  - Dependency updates
 
 ###2026.09.30
 - Updated Newt to 1.18.0. Changes from Newt:
