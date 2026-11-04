@@ -2,11 +2,11 @@
 <!DOCTYPE PLUGIN [
   <!ENTITY name        "pangolin_newt">
   <!ENTITY author      "Joly0">
-  <!ENTITY version     "2026.10.21">
-  <!ENTITY newtVersion "1.19.0">
+  <!ENTITY version     "2026.11.04">
+  <!ENTITY newtVersion "1.20.0">
   <!ENTITY gitURL      "https://github.com/&author;/unraid-&name;/raw/main">
   <!ENTITY pluginURL   "&gitURL;/&name;.plg">
-  <!ENTITY md5         "f0942dcf44c9bcf27733843513798ed6">
+  <!ENTITY md5         "f228c8bff995f67a057a4ef8de832751">
   <!ENTITY binURL      "https://github.com/fosrl/newt/releases/download/&newtVersion;/newt_linux_amd64">
   <!ENTITY plugin      "/boot/config/plugins/&name;">
   <!ENTITY emhttp      "/usr/local/emhttp/plugins/&name;">
@@ -26,6 +26,14 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" pluginURL="&pluginURL;" min="7.0.0" launch="Settings/PangolinNewt" icon="pangolin_newt.png" support="https://forums.unraid.net/topic/200209-plugin-pangolin-newt/">
 
 <CHANGES>
+
+###2026.11.04
+- Updated Newt to 1.20.0. Changes from Newt:
+  - Newt 1.19.1:
+    - Fix data plane dies on access violation #471
+  - Newt 1.20.0:
+    - Support ssh logging
+    - Fix auto update on Windows
 
 ###2026.10.21
 - Updated Newt to 1.19.0. Changes from Newt:
