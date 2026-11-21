@@ -2,11 +2,11 @@
 <!DOCTYPE PLUGIN [
   <!ENTITY name        "pangolin_newt">
   <!ENTITY author      "Joly0">
-  <!ENTITY version     "2026.11.04">
-  <!ENTITY newtVersion "1.20.0">
+  <!ENTITY version     "2026.11.21">
+  <!ENTITY newtVersion "1.20.1">
   <!ENTITY gitURL      "https://github.com/&author;/unraid-&name;/raw/main">
   <!ENTITY pluginURL   "&gitURL;/&name;.plg">
-  <!ENTITY md5         "f228c8bff995f67a057a4ef8de832751">
+  <!ENTITY md5         "75f92ed10c11af653b9cfb94a2b3e9b7">
   <!ENTITY binURL      "https://github.com/fosrl/newt/releases/download/&newtVersion;/newt_linux_amd64">
   <!ENTITY plugin      "/boot/config/plugins/&name;">
   <!ENTITY emhttp      "/usr/local/emhttp/plugins/&name;">
@@ -26,6 +26,14 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" pluginURL="&pluginURL;" min="7.0.0" launch="Settings/PangolinNewt" icon="pangolin_newt.png" support="https://forums.unraid.net/topic/200209-plugin-pangolin-newt/">
 
 <CHANGES>
+
+###2026.11.21
+- Updated Newt to 1.20.1. Changes from Newt:
+  - Add `--local-endpoints` to list IPs for local connections to try
+  - Fix keep the physical socket receive routine alive after read errors top prevent disconnections on MacOS
+  - Fix ICMP echo replies for alias resources to come from the pinged address
+  - Fix turn off gVisor's RACK which stalls downloads after packet loss (enable again with --enable-tcp-rack)
+  - Fix telemetry not enableable on CLI
 
 ###2026.11.04
 - Updated Newt to 1.20.0. Changes from Newt:
